@@ -168,7 +168,10 @@ class DaskExecutor(Executor):
             if isinstance(cluster_class, str):
                 cluster_class = import_object(cluster_class)
             if cluster_kwargs is None:
-                cluster_kwargs = {}
+                if context.config.engine.executor.dask.cluster_kwargs:
+                    cluster_kwargs = context.config.engine.executor.dask.cluster_kwargs
+                else:
+                    cluster_kwargs = {}
             else:
                 cluster_kwargs = cluster_kwargs.copy()
 

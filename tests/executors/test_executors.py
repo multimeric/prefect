@@ -311,6 +311,12 @@ class TestDaskExecutor:
         exp = f"Connecting to an existing Dask cluster at {address}"
         assert any(exp in rec.message for rec in caplog.records)
 
+    def test_config_kwargs(self):
+        kwargs = {'threads_per_worker': 7}
+        with dask.config.engine.executor.dask.set(cluster_kwargs = kwargs):
+            executor = DaskExecutor()
+            assert executor.cluster_kwargs == kwargs
+
     def test_start_local_cluster(self, caplog):
         executor = DaskExecutor(cluster_kwargs={"processes": False})
         assert executor.cluster_class == distributed.LocalCluster
